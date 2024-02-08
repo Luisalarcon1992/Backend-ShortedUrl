@@ -46,11 +46,15 @@ namespace Backend_ShortedUrl.Controllers
 
             var result = URLStore.urlList.FirstOrDefault(url => url.Id == url.Id);
 
-            if (result != null && result.Id == url.Id)
+            if (result == null || result.Id == url.Id)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, "El ID es nulo o bien ya está en la base de datos.");
             }
+
             url.Id = URLStore.urlList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1; 
+
+            URLStore.urlList.Add(url);
+
             return Ok(url);
         }
     }
